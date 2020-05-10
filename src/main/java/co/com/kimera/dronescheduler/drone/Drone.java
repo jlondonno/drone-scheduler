@@ -1,5 +1,8 @@
 package co.com.kimera.dronescheduler.drone;
 
+import co.com.kimera.dronescheduler.drone.impl.CardinalDirection;
+import co.com.kimera.dronescheduler.drone.impl.Coordinate;
+
 /**
  * @author <a href="mailto:javier.londonno@gmail.com">Javier Londoño</a> <br>
  * @project drone-scheduler
@@ -9,7 +12,7 @@ package co.com.kimera.dronescheduler.drone;
 public interface Drone {
 	
 	/**
-	 * Add the information from a request
+	 * Add the information for a request
 	 * @author <a href="mailto:javier.londonno@gmail.com">Javier Londoño</a> <br>
 	 * @date May 10, 2020
 	 * @param request
@@ -30,4 +33,20 @@ public interface Drone {
 	 * @return String
 	 */
 	public String getInformationDeliveries();
+	
+	/**
+	 * Deliver the current coordinate from the drone
+	 * @author <a href="mailto:javier.londonno@gmail.com">Javier Londoño</a> <br>
+	 * @date May 10, 2020
+	 * @return
+	 */
+	public Coordinate getCurrentPosition();
+	
+	/**
+	 * Deliver the current cardinal direction which is being pointed by the the drone
+	 * @author <a href="mailto:javier.londonno@gmail.com">Javier Londoño</a> <br>
+	 * @date May 10, 2020
+	 * @return CardinalDirection
+	 */
+	public CardinalDirection getPointingTo();
 }
