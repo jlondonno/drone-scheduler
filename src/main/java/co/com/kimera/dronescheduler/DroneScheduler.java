@@ -17,36 +17,40 @@ import co.com.kimera.dronescheduler.util.FileUtil;
  * @date May 10, 2020
  */
 public class DroneScheduler {
-	
+
 	public static void main(String[] args) {
-		
-		String request1 = "AAAAIAAAAAAAA";
+
+		String request1 = "AAAAIAA";
 		String request2 = "DDDAIAD";
 		String request3 = "AAIADAD";
-		
-		Drone d1 = new SuCorrientazoDrone(CardinalDirection.NORTH, new Coordinate(5,5), 3, 20);
+
+		Drone d1 = new SuCorrientazoDrone(CardinalDirection.NORTH, new Coordinate(0, 0), 3, 10);
 		d1.addInstructionsRequest(request1);
 		d1.addInstructionsRequest(request2);
 		d1.addInstructionsRequest(request3);
 		d1.startRequestsDelivery();
-		
-		Drone d2 = new SuCorrientazoDrone();
-		
-		String file1 = "test-s4n.txt";
+
 		try {
-			List<String> lines = FileUtil.readFile(file1);
-			
-			for(String request : lines) {
+
+			String file1 = "test-s4n.txt";
+			Drone d2 = new SuCorrientazoDrone();
+
+			for (String request : getInstructionsFromFile(file1)) {
 				d2.addInstructionsRequest(request);
 			}
 			
 			d2.startRequestsDelivery();
-			FileUtil.writeFile(d2.getInformationDeliveries(), "/Users/jlondono/d1Output.txt");
+
 			FileUtil.writeFile(d1.getInformationDeliveries(), "/Users/jlondono/d1Output-2.txt");
+			FileUtil.writeFile(d2.getInformationDeliveries(), "/Users/jlondono/d1Output.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static List<String> getInstructionsFromFile(String fileName) throws IOException, URISyntaxException {
+		return FileUtil.readFile(fileName);
 	}
 }

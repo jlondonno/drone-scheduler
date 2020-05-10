@@ -1,9 +1,12 @@
 package co.com.kimera.dronescheduler.drone.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import co.com.kimera.dronescheduler.drone.Drone;
+import co.com.kimera.dronescheduler.exception.DroneExceedsRequestsLimitException;
+import co.com.kimera.dronescheduler.exception.OutOfReachDroneException;
 
 /**
  * @author <a href="mailto:javier.londonno@gmail.com">Javier Londoño</a> <br>
@@ -19,22 +22,27 @@ public class SuCorrientazoDrone implements Drone {
 	private List<String> droneRequests = new ArrayList<String>();
 	private List<String> deliveryInformation = new ArrayList<String>();
 	private CardinalDirection pointingTo;
+	private CardinalDirection startingPointingTo;
 	private Coordinate currentPosition;
 	private Coordinate startingPosition;
 	private Integer requestsLimitPerDron;
 	private Integer blocksToMoveAroundLimit;
 
 	public SuCorrientazoDrone() {
-		pointingTo = CardinalDirection.NORTH;
-		currentPosition = new Coordinate(0, 0);
-		startingPosition = new Coordinate(0, 0);
+		this.pointingTo = CardinalDirection.NORTH;
+		this.currentPosition = new Coordinate(0, 0);
+		this.startingPosition = new Coordinate(0, 0);
 	}
 
 	public SuCorrientazoDrone(CardinalDirection pointingTo, Coordinate startingPosition, Integer requestsLimitPerDron,
 			Integer blocksToMoveAroundLimit) {
 		this.pointingTo = pointingTo;
-		this.currentPosition = startingPosition;
+		this.currentPosition = new Coordinate(startingPosition.getX(), startingPosition.getY());
+		
+		
+		this.startingPointingTo =  pointingTo;
 		this.startingPosition = startingPosition;
+		
 		this.requestsLimitPerDron = requestsLimitPerDron;
 		this.blocksToMoveAroundLimit = blocksToMoveAroundLimit;
 	}
@@ -42,13 +50,14 @@ public class SuCorrientazoDrone implements Drone {
 	public void addInstructionsRequest(String request) {
 		int limit = requestsLimitPerDron != null ? requestsLimitPerDron : MAX_NUMBER_REQUESTS_PER_TRIP;
 		if (droneRequests.size() >= limit) {
-			throw new RuntimeException("Drone is not able to load another request");
+			throw new DroneExceedsRequestsLimitException("Drone is not able to load another request");
 		}
 		droneRequests.add(request);
 	}
-	
+
 	/**
 	 * Move a position the drone
+	 * 
 	 * @author <a href="mailto:javier.londonno@gmail.com">Javier Londoño</a> <br>
 	 * @date May 10, 2020
 	 */
@@ -73,29 +82,15 @@ public class SuCorrientazoDrone implements Drone {
 			getCurrentPosition().setX(xToMove);
 			getCurrentPosition().setY(yToMove);
 		} else {
-			abortDelivery();
+			throw new OutOfReachDroneException(
+					"Drone is out of reach so it will go back to the starting position and will suspend all the deliveries");
 		}
 	}
-	
+
 	/**
-	 * Abort all the deliveries from the dron when it leaves the valid area and
-	 * return the drone to the starting point
-	 * @author <a href="mailto:javier.londonno@gmail.com">Javier Londoño</a> <br>
-	 * @date May 10, 2020
-	 */
-	private void abortDelivery() {
-		getCurrentPosition().setX(getStartingPosition().getX());
-		getCurrentPosition().setY(getStartingPosition().getY());
-		pointingTo = CardinalDirection.NORTH;
-		throw new RuntimeException("Drone has disappeared...");
-		// TODO
-		// Abort all the pending requests
-		// Report that in the txt file
-	}
-	
-	
-	/**
-	 * Determine if a movement from the drone is valid (the movement is inside of the valid area)
+	 * Determine if a movement from the drone is valid (the movement is inside of
+	 * the valid area)
+	 * 
 	 * @author <a href="mailto:javier.londonno@gmail.com">Javier Londoño</a> <br>
 	 * @date May 10, 2020
 	 * @param newX
@@ -103,8 +98,8 @@ public class SuCorrientazoDrone implements Drone {
 	 * @return boolean
 	 */
 	private boolean isValidMovement(int newX, int newY) {
-		
-		//Calculate the distance between the starting and the current coordinate
+
+		// Calculate the distance between the starting and the current coordinate
 		double distanceBetweenTwoPoints = Math.sqrt(
 				Math.pow(newX - getStartingPosition().getX(), 2) + Math.pow((newY - getStartingPosition().getY()), 2));
 		int definedLimit = blocksToMoveAroundLimit != null ? blocksToMoveAroundLimit : MAX_NUMBER_BLOCKS_TO_MOVE;
@@ -114,9 +109,10 @@ public class SuCorrientazoDrone implements Drone {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Rotate the drone ninety degrees to the left side
+	 * 
 	 * @author <a href="mailto:javier.londonno@gmail.com">Javier Londoño</a> <br>
 	 * @date May 10, 2020
 	 */
@@ -135,9 +131,10 @@ public class SuCorrientazoDrone implements Drone {
 			pointingTo = CardinalDirection.NORTH;
 		}
 	}
-	
+
 	/**
 	 * Rotate the drone ninety degrees to the right side
+	 * 
 	 * @author <a href="mailto:javier.londonno@gmail.com">Javier Londoño</a> <br>
 	 * @date May 10, 2020
 	 */
@@ -156,13 +153,14 @@ public class SuCorrientazoDrone implements Drone {
 			pointingTo = CardinalDirection.NORTH;
 		}
 	}
-	
-	public void startRequestsDelivery() {
-		for (String request : droneRequests) {
-			String[] instructions = request.split("");
-			for (String instruction : instructions) {
 
-				try {
+	public void startRequestsDelivery() {
+		try {
+			for (String request : droneRequests) {
+				String[] instructions = request.split("");
+
+				for (String instruction : instructions) {
+
 					Movement movement = Movement.valueOf(instruction);
 					switch (movement) {
 					case D:
@@ -174,30 +172,45 @@ public class SuCorrientazoDrone implements Drone {
 					default:
 						moveForward();
 					}
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
-					System.out.println("");
-					break;
 				}
+				registerActivity(String.format("Request delivered at: %s, pointing to %s \n", getCurrentPosition(),
+						pointingTo.getName()));
 			}
-
-			registerDelivery(String.format("Request delivered at: %s, Poiting to %s", getCurrentPosition(),
-					pointingTo.getName()));
+		} catch (OutOfReachDroneException e) {
+			returnDroneToStartingPosition();
+			registerActivity(String.format("%s.  Drone located at %s, pointing to %s \n", e.getMessage(),
+					getCurrentPosition(), pointingTo.getName()));
 		}
 	}
-	
+
 	/**
-	 * Record the information for every delivery
+	 * Return the drone to the starting position
+	 * @author <a href="mailto:javier.londonno@gmail.com">Javier Londoño</a> <br>
+	 * @date May 10, 2020
+	 */
+	private void returnDroneToStartingPosition() {
+		getCurrentPosition().setX(getStartingPosition().getX());
+		getCurrentPosition().setY(getStartingPosition().getY());
+		setPointingTo(getStartingPointingTo());
+	}
+
+	/**
+	 * Record the information for every activity of the drone
+	 * 
 	 * @author <a href="mailto:javier.londonno@gmail.com">Javier Londoño</a> <br>
 	 * @date May 10, 2020
 	 * @param information
 	 */
-	private void registerDelivery(String information) {
-		deliveryInformation.add(information);
+	private void registerActivity(String information) {
+		deliveryInformation.add(String.format("- (%s) %s", new Date().toString(), information));
 	}
-	
-	public String getInformationDeliveries(){
-		return "";
+
+	public String getInformationDeliveries() {
+		String information = "";
+		for(String delivery : deliveryInformation) {
+			information += delivery;
+		}
+		return information;
 	}
 
 	public List<String> getRequests() {
@@ -207,16 +220,24 @@ public class SuCorrientazoDrone implements Drone {
 	public CardinalDirection getPointingTo() {
 		return pointingTo;
 	}
+	
+	private void setPointingTo(CardinalDirection pointingTo) {
+		this.pointingTo = pointingTo;
+	}
 
 	public Coordinate getCurrentPosition() {
 		return currentPosition;
 	}
-	
+
 	public Coordinate getStartingPosition() {
 		return startingPosition;
 	}
 
 	public List<String> getDeliveryInformation() {
 		return deliveryInformation;
+	}
+
+	private CardinalDirection getStartingPointingTo() {
+		return startingPointingTo;
 	}
 }
