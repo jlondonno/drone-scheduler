@@ -1,5 +1,12 @@
 package co.com.kimera.dronescheduler.drone.impl;
 
+/**
+ * @author <a href="mailto:javier.londonno@gmail.com">Javier Londoño</a> <br>
+ * @project drone-scheduler
+ * @class Coordinate
+ * @date May 10, 2020
+ *
+ */
 public class Coordinate {
 
 	private int x;
