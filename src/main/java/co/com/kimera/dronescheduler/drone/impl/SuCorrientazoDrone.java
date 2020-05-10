@@ -34,6 +34,7 @@ public class SuCorrientazoDrone implements Drone {
 			Integer blocksToMoveAroundLimit) {
 		this.pointingTo = pointingTo;
 		this.currentPosition = startingPosition;
+		this.startingPosition = startingPosition;
 		this.requestsLimitPerDron = requestsLimitPerDron;
 		this.blocksToMoveAroundLimit = blocksToMoveAroundLimit;
 	}
@@ -103,7 +104,7 @@ public class SuCorrientazoDrone implements Drone {
 	 */
 	private boolean isValidMovement(int newX, int newY) {
 		
-		//Calculate the distance between the starting and the current position
+		//Calculate the distance between the starting and the current coordinate
 		double distanceBetweenTwoPoints = Math.sqrt(
 				Math.pow(newX - getStartingPosition().getX(), 2) + Math.pow((newY - getStartingPosition().getY()), 2));
 		int definedLimit = blocksToMoveAroundLimit != null ? blocksToMoveAroundLimit : MAX_NUMBER_BLOCKS_TO_MOVE;
