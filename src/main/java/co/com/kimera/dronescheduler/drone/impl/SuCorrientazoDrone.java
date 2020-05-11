@@ -30,6 +30,7 @@ public class SuCorrientazoDrone implements Drone {
 
 	public SuCorrientazoDrone() {
 		this.pointingTo = CardinalDirection.NORTH;
+		this.startingPointingTo = CardinalDirection.NORTH;
 		this.currentPosition = new Coordinate(0, 0);
 		this.startingPosition = new Coordinate(0, 0);
 	}
