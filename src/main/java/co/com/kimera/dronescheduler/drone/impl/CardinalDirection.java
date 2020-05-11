@@ -10,7 +10,7 @@ package co.com.kimera.dronescheduler.drone.impl;
  */
 public enum CardinalDirection {
 
-	WEST("West"), EAST("East"), NORTH("North"), SOUTH("South");
+	WEST("Occidente"), EAST("Oriente"), NORTH("Norte"), SOUTH("Sur");
 
 	private String name;
 

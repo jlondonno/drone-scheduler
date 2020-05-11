@@ -25,7 +25,7 @@ public class TestSuCorrientazoDrone {
 	@Before
 	public void setUp() {
 
-		String request1 = "AAAAIAA";
+		String request1 = "BAAAIAA";
 		String request2 = "DDDAIAD";
 		String request3 = "AAIADAD";
 		String request4 = "AAAAAAA";

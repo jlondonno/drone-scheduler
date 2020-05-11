@@ -6,6 +6,7 @@ import java.util.List;
 
 import co.com.kimera.dronescheduler.drone.Drone;
 import co.com.kimera.dronescheduler.exception.DroneExceedsRequestsLimitException;
+import co.com.kimera.dronescheduler.exception.IlegalDroneInstructionException;
 import co.com.kimera.dronescheduler.exception.OutOfReachDroneException;
 
 /**
@@ -38,11 +39,10 @@ public class SuCorrientazoDrone implements Drone {
 			Integer blocksToMoveAroundLimit) {
 		this.pointingTo = pointingTo;
 		this.currentPosition = new Coordinate(startingPosition.getX(), startingPosition.getY());
-		
-		
-		this.startingPointingTo =  pointingTo;
+
+		this.startingPointingTo = pointingTo;
 		this.startingPosition = startingPosition;
-		
+
 		this.requestsLimitPerDron = requestsLimitPerDron;
 		this.blocksToMoveAroundLimit = blocksToMoveAroundLimit;
 	}
@@ -159,22 +159,30 @@ public class SuCorrientazoDrone implements Drone {
 			for (String request : droneRequests) {
 				String[] instructions = request.split("");
 
-				for (String instruction : instructions) {
+				try {
+					for (String instruction : instructions) {
 
-					Movement movement = Movement.valueOf(instruction);
-					switch (movement) {
-					case D:
-						rotateNinetyDegreesRight();
-						break;
-					case I:
-						rotateNinetyDegreesLeft();
-						break;
-					default:
-						moveForward();
+						Movement movement = Movement.valueOf(instruction);
+						switch (movement) {
+						case D:
+							rotateNinetyDegreesRight();
+							break;
+						case I:
+							rotateNinetyDegreesLeft();
+							break;
+						default:
+							moveForward();
+						}
 					}
+
+					registerActivity(String.format("%s, direccion %s \n", getCurrentPosition(),
+							pointingTo.getName()));
+
+				} catch (IllegalArgumentException e) {
+					throw new IlegalDroneInstructionException(String.format(
+							"An instruction registered by the user is invalid (valid ones are A, D and I).  User input: %s",
+							request));
 				}
-				registerActivity(String.format("Request delivered at: %s, pointing to %s \n", getCurrentPosition(),
-						pointingTo.getName()));
 			}
 		} catch (OutOfReachDroneException e) {
 			returnDroneToStartingPosition();
@@ -185,6 +193,7 @@ public class SuCorrientazoDrone implements Drone {
 
 	/**
 	 * Return the drone to the starting position
+	 * 
 	 * @author <a href="mailto:javier.londonno@gmail.com">Javier Londoño</a> <br>
 	 * @date May 10, 2020
 	 */
@@ -207,7 +216,7 @@ public class SuCorrientazoDrone implements Drone {
 
 	public String getInformationDeliveries() {
 		String information = "";
-		for(String delivery : deliveryInformation) {
+		for (String delivery : deliveryInformation) {
 			information += delivery;
 		}
 		return information;
@@ -220,7 +229,7 @@ public class SuCorrientazoDrone implements Drone {
 	public CardinalDirection getPointingTo() {
 		return pointingTo;
 	}
-	
+
 	private void setPointingTo(CardinalDirection pointingTo) {
 		this.pointingTo = pointingTo;
 	}
