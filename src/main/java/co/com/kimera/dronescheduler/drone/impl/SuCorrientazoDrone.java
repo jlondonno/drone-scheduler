@@ -1,7 +1,6 @@
 package co.com.kimera.dronescheduler.drone.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import co.com.kimera.dronescheduler.drone.Drone;
@@ -20,8 +19,8 @@ public class SuCorrientazoDrone implements Drone {
 	private static final int MAX_NUMBER_REQUESTS_PER_TRIP = 3;
 	private static final int MAX_NUMBER_BLOCKS_TO_MOVE = 10;
 
-	private List<String> droneRequests = new ArrayList<String>();
-	private List<String> deliveryInformation = new ArrayList<String>();
+	private List<String> droneRequests = new ArrayList<>();
+	private List<String> deliveryInformation = new ArrayList<>();
 	private CardinalDirection pointingTo;
 	private CardinalDirection startingPointingTo;
 	private Coordinate currentPosition;
@@ -186,8 +185,8 @@ public class SuCorrientazoDrone implements Drone {
 			}
 		} catch (OutOfReachDroneException e) {
 			returnDroneToStartingPosition();
-			registerActivity(String.format("%s.  Drone located at %s, pointing to %s \n", e.getMessage(),
-					getCurrentPosition(), pointingTo.getName()));
+			registerActivity(String.format("%s, direccion %s. %s \n",
+					getCurrentPosition(), pointingTo.getName(), e.getMessage()));
 		}
 	}
 
@@ -211,15 +210,13 @@ public class SuCorrientazoDrone implements Drone {
 	 * @param information
 	 */
 	private void registerActivity(String information) {
-		deliveryInformation.add(String.format("- (%s) %s", new Date().toString(), information));
+		deliveryInformation.add(information);
 	}
 
 	public String getInformationDeliveries() {
-		String information = "";
-		for (String delivery : deliveryInformation) {
-			information += delivery;
-		}
-		return information;
+		StringBuilder information = new StringBuilder();
+		deliveryInformation.forEach(information :: append);
+		return information.toString();
 	}
 
 	public List<String> getRequests() {

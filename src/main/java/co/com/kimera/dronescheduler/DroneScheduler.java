@@ -1,7 +1,10 @@
 package co.com.kimera.dronescheduler;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import co.com.kimera.dronescheduler.drone.Drone;
@@ -20,37 +23,37 @@ public class DroneScheduler {
 
 	public static void main(String[] args) {
 
-		String request1 = "AAAAIAA";
-		String request2 = "DDDAIAD";
-		String request3 = "AAIADAD";
-
-		Drone d1 = new SuCorrientazoDrone(CardinalDirection.NORTH, new Coordinate(0, 0), 3, 10);
-		d1.addInstructionsRequest(request1);
-		d1.addInstructionsRequest(request2);
-		d1.addInstructionsRequest(request3);
-		d1.startRequestsDelivery();
-
+		String file1 = "/Users/jlondono/in01.txt";
+		String file2 = "/Users/jlondono/in02.txt";
+		String file3 = "/Users/jlondono/in03.txt";
+		
 		try {
-
-			String file1 = "test-s4n.txt";
-			Drone d2 = new SuCorrientazoDrone();
-
-			for (String request : getInstructionsFromFile(file1)) {
-				d2.addInstructionsRequest(request);
-			}
-			
-			d2.startRequestsDelivery();
-
-			FileUtil.writeFile(d1.getInformationDeliveries(), "/Users/jlondono/d1Output-2.txt");
-			FileUtil.writeFile(d2.getInformationDeliveries(), "/Users/jlondono/d1Output.txt");
+			processInstructionFromFile(file1);
+			processInstructionFromFile(file2);
+			processInstructionFromFile(file3);
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
-
-	private static List<String> getInstructionsFromFile(String fileName) throws IOException, URISyntaxException {
-		return FileUtil.readFile(fileName);
+	
+	/**
+	 * Process the instructions from the file and dispatch the drone
+	 * @param filePath
+	 * @throws IOException
+	 */
+	private static void processInstructionFromFile(String filePath) throws IOException {
+		
+		Drone myDrone = new SuCorrientazoDrone(CardinalDirection.NORTH, new Coordinate(0, 0), 3, 10);
+		Path pathFile = Paths.get(filePath);
+		
+		Charset charset = Charset.forName("ISO-8859-1");
+		List<String> lines = Files.readAllLines(pathFile, charset);
+		lines.stream().forEach(line -> myDrone.addInstructionsRequest(line));
+		myDrone.startRequestsDelivery();
+		
+		String fileName = pathFile.toFile().getName();
+		String codeFileNameIn = fileName.substring(fileName.indexOf("in") + 2, fileName.length());
+		String fileOut =  String.format("%s/out%s", pathFile.getParent(), codeFileNameIn);
+		FileUtil.writeFile(myDrone.getInformationDeliveries(), fileOut);
 	}
 }
