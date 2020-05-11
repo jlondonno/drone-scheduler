@@ -26,6 +26,8 @@ public class FileUtil {
 		File file = new File(fileName);
 		FileWriter fr = null;
 		BufferedWriter br = null;
+		String header = "===== Reporte de Entregas =====\n";
+		lines = header + lines;
 		try {
 			fr = new FileWriter(file);
 			br = new BufferedWriter(fr);
