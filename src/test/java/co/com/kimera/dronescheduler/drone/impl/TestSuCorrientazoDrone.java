@@ -1,6 +1,7 @@
 package co.com.kimera.dronescheduler.drone.impl;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,7 +26,7 @@ public class TestSuCorrientazoDrone {
 	@Before
 	public void setUp() {
 
-		String request1 = "BAAAIAA";
+		String request1 = "AAAAIAA";
 		String request2 = "DDDAIAD";
 		String request3 = "AAIADAD";
 		String request4 = "AAAAAAA";
@@ -69,9 +70,9 @@ public class TestSuCorrientazoDrone {
 		Coordinate currentCoordinate = drone1.getCurrentPosition();
 		CardinalDirection currentCardinalDirection = drone1.getPointingTo();
 		Coordinate expectedCoordinate = new Coordinate(0, 0);
-		Assert.assertEquals("The expected coordinates of the drone is incorrect", expectedCoordinate,
+		assertEquals("The expected coordinates of the drone is incorrect", expectedCoordinate,
 				currentCoordinate);
-		Assert.assertEquals("The current cardinal direction of the drone is incorrect", CardinalDirection.WEST,
+		assertEquals("The current cardinal direction of the drone is incorrect", CardinalDirection.WEST,
 				currentCardinalDirection);
 	}
 
@@ -81,9 +82,9 @@ public class TestSuCorrientazoDrone {
 		Coordinate currentCoordinate = drone2.getCurrentPosition();
 		CardinalDirection currentCardinalDirection = drone2.getPointingTo();
 		Coordinate expectedCoordinate = new Coordinate(0, 0);
-		Assert.assertEquals("The expected coordinates of the drone is incorrect", expectedCoordinate,
+		assertEquals("The expected coordinates of the drone is incorrect", expectedCoordinate,
 				currentCoordinate);
-		Assert.assertEquals("The current cardinal direction of the drone is incorrect", CardinalDirection.WEST,
+		assertEquals("The current cardinal direction of the drone is incorrect", CardinalDirection.WEST,
 				currentCardinalDirection);
 	}
 
@@ -93,9 +94,9 @@ public class TestSuCorrientazoDrone {
 		Coordinate currentCoordinate = drone3.getCurrentPosition();
 		CardinalDirection currentCardinalDirection = drone3.getPointingTo();
 		Coordinate expectedCoordinate = new Coordinate(4, 5);
-		Assert.assertEquals("The expected coordinates of the drone is incorrect", expectedCoordinate,
+		assertEquals("The expected coordinates of the drone is incorrect", expectedCoordinate,
 				currentCoordinate);
-		Assert.assertEquals("The current cardinal direction of the drone is incorrect", CardinalDirection.EAST,
+		assertEquals("The current cardinal direction of the drone is incorrect", CardinalDirection.EAST,
 				currentCardinalDirection);
 	}
 
@@ -105,9 +106,9 @@ public class TestSuCorrientazoDrone {
 		Coordinate currentCoordinate = drone4.getCurrentPosition();
 		CardinalDirection currentCardinalDirection = drone4.getPointingTo();
 		Coordinate expectedCoordinate = new Coordinate(2, -5);
-		Assert.assertEquals("The expected coordinates of the drone is incorrect", expectedCoordinate,
+		assertEquals("The expected coordinates of the drone is incorrect", expectedCoordinate,
 				currentCoordinate);
-		Assert.assertEquals("The current cardinal direction of the drone is incorrect", CardinalDirection.SOUTH,
+		assertEquals("The current cardinal direction of the drone is incorrect", CardinalDirection.SOUTH,
 				currentCardinalDirection);
 
 	}
@@ -118,9 +119,9 @@ public class TestSuCorrientazoDrone {
 		Coordinate currentCoordinate = drone5.getCurrentPosition();
 		CardinalDirection currentCardinalDirection = drone5.getPointingTo();
 		Coordinate expectedCoordinate = new Coordinate(2, 2);
-		Assert.assertEquals("The expected coordinates of the drone is incorrect", expectedCoordinate,
+		assertEquals("The expected coordinates of the drone is incorrect", expectedCoordinate,
 				currentCoordinate);
-		Assert.assertEquals("The current cardinal direction of the drone is incorrect", CardinalDirection.WEST,
+		assertEquals("The current cardinal direction of the drone is incorrect", CardinalDirection.WEST,
 				currentCardinalDirection);
 
 	}
@@ -131,9 +132,9 @@ public class TestSuCorrientazoDrone {
 		Coordinate currentCoordinate = drone6.getCurrentPosition();
 		CardinalDirection currentCardinalDirection = drone6.getPointingTo();
 		Coordinate expectedCoordinate = new Coordinate(0, 0);
-		Assert.assertEquals("The expected coordinates of the drone is incorrect", expectedCoordinate,
+		assertEquals("The expected coordinates of the drone is incorrect", expectedCoordinate,
 				currentCoordinate);
-		Assert.assertEquals("The current cardinal direction of the drone is incorrect", CardinalDirection.NORTH,
+		assertEquals("The current cardinal direction of the drone is incorrect", CardinalDirection.NORTH,
 				currentCardinalDirection);
 
 	}
