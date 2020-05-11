@@ -7,4 +7,7 @@ To execute the application, please go to the src/main/java/co/com/kimera/dronesc
 java DroneScheduler /Users/javier/in01.txt /Users/javier/in02.txt /Users/javier/in03.txt
 ```
 
-Keep in mind you have to compile all the project to execute the previous command.
+Keep in mind you have to compile all the project to execute the previous command.  To do that, please go to the root folder and execute the following command (you have to install Apache Maven if you don't have it)
+```json
+mvn clean install
+```
