@@ -54,13 +54,13 @@ public class FileUtil {
 			br = new BufferedWriter(fr);
 			br.write(lines);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		} finally {
 			try {
 				br.close();
 				fr.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 		}
 	}
