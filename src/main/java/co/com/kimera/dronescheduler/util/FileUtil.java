@@ -4,12 +4,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 
 /**
  * Utility class to perform different activities with files
@@ -20,23 +14,6 @@ import java.util.List;
  *
  */
 public class FileUtil {
-	
-	/**
-	 * Write a file using the information from a List of strings
-	 * @author <a href="mailto:javier.londonno@gmail.com">Javier Londoño</a> <br>
-	 * @date May 10, 2020
-	 * @param fileName
-	 * @return List<String>
-	 * @throws IOException
-	 * @throws URISyntaxException
-	 */
-	public static List<String> readFile(String fileName) throws IOException, URISyntaxException {
-		Path path = Paths.get(ClassLoader.getSystemResource(fileName).toURI());
-		List<String> lines = null;
-		Charset charset = Charset.forName("ISO-8859-1");
-		lines = Files.readAllLines(path, charset);
-		return lines;
-	}
 	
 	/**
 	 * Write a files using the information from a string
