@@ -14,15 +14,16 @@ javac -version
 It should show something like: 
 `javac 1.8.0_72`
 
+Apache Maven is required as well. After you installed it, please go to the root folder and execute the following command
+```
+mvn clean install
+```
+
 ### Execution
 
 To execute the application, please go to the src/main/java/co/com/kimera/dronescheduler/ folder and execute DroneScheduler.java file.  The user has to pass the file with the instructions as parameter.  For instance:
 
-```json
+```
 java DroneScheduler /Users/javier/in01.txt /Users/javier/in02.txt /Users/javier/in03.txt
 ```
 
-Keep in mind you have to compile all the project to execute the previous command.  To do that, please go to the root folder and execute the following command (you have to install Apache Maven if you don't have it)
-```json
-mvn clean install
-```
