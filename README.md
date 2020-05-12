@@ -14,7 +14,7 @@ javac -version
 It should show something like: 
 `javac 1.8.0_72`
 
-Apache Maven is required as well. After you installed it, please go to the root folder and execute the following command
+Apache Maven is required as well. After you installed it, please go to the root folder and execute the following command (it is going to to execute test cases
 ```
 mvn clean install
 ```
