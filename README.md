@@ -27,5 +27,5 @@ To execute the application, please go to the src/main/java/co/com/kimera/dronesc
 java DroneScheduler /Users/javier/in01.txt /Users/javier/in02.txt /Users/javier/in03.txt
 ```
 
-![Explanation](drone_calculate.jpg)
+![Explanation](dron_calculate.jpg)
 
