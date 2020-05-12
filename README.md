@@ -27,7 +27,7 @@ To execute the application, please go to the src/main/java/co/com/kimera/dronesc
 java DroneScheduler /Users/javier/in01.txt /Users/javier/in02.txt /Users/javier/in03.txt
 ```
 
-### How it works?
+### How does it work?
 
 The drone has an initial position.  Let's assume the coordinate (0,0).  When the drone starts to move in any direction (north, west, south, east), before moving to a new coordinate or position, the algorithm calculates the distance between the initial and new coordinate toward the drone is going to move.  If that distance is lesser than the limit defined by the user, the drone move forward without problems.   If the distance is higher that the limit defined by the user when initializing the drone, that one is going to return to the initial position.
 
