@@ -11,7 +11,8 @@ To check that you have Java installed just run this command:
 javac -version
 ```
 
-It should show something like: `javac 1.8.0_162`
+It should show something like: 
+`javac 1.8.0_72`
 
 ### Execution
 
