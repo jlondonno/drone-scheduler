@@ -3,7 +3,7 @@ drone-scheculer is an app which is responsible for automate the deliver of reque
 
 ### Prerequisites
 
-To build and run this small app you just need to have **Java 8** installed.
+To build and run this small app you just need to have **Java 8** or higher installed.
 
 To check that you have Java installed just run this command:
 
